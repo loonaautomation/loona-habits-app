@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Loona Habits App</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
+    min-height: 100vh; display: flex; justify-content: center; align-items: flex-start;
+    padding: 20px; color: #fff;
+  }
+  .card {
+    background: rgba(255,255,255,0.07); border-radius: 24px; padding: 28px 22px;
+    width: 100%; max-width: 400px; backdrop-filter: blur(12px);
+    border: 1px solid rgba(255,255,255,0.12);
+    box-shadow: 0 12px 40px rgba(0,0,0,0.4); margin: 10px 0;
+  }
+  .header { display: flex; align-items: center; gap: 12px; margin-bottom: 4px; }
+  .header img { width: 44px; height: 44px; border-radius: 12px; }
+  .header h1 { font-size: 20px; }
+  .brand { font-size: 10px; color: #ffca28; letter-spacing: 2px; text-align: center; margin-bottom: 4px; }
+  .sub { text-align: center; color: #aaa; font-size: 12px; margin-bottom: 20px; }
+  .date-line { text-align: center; font-size: 14px; color: #ffca28; margin-bottom: 16px; font-weight: 600; }
+
+  /* Progress */
+  .progress-wrap { margin-bottom: 18px; }
+  .progress-label { display: flex; justify-content: space-between; font-size: 13px; color: #ccc; margin-bottom: 6px; }
+  .progress-bar { height: 12px; background: rgba(255,255,255,0.1); border-radius: 8px; overflow: hidden; }
+  .progress-fill { height: 100%; background: linear-gradient(90deg, #4CAF50, #8BC34A); border-radius: 8px;
+    transition: width 0.3s; width: 0%; }
+
+  /* Habits */
+  .habit {
+    display: flex; align-items: center; gap: 12px; padding: 14px;
+    background: rgba(255,255,255,0.05); border-radius: 14px; margin-bottom: 10px;
+    cursor: pointer; border: 1px solid transparent; transition: all 0.15s;
+    user-select: none; -webkit-tap-highlight-color: transparent;
+  }
+  .habit:active { transform: scale(0.98); }
+  .habit.done { border-color: rgba(76,175,80,0.5); background: rgba(76,175,80,0.1); }
+  .check {
+    width: 30px; height: 30px; border-radius: 50%; border: 2px solid rgba(255,255,255,0.3);
+    display: flex; align-items: center; justify-content: center; font-size: 16px; flex-shrink: 0;
+    transition: all 0.15s;
+  }
+  .habit.done .check { background: #4CAF50; border-color: #4CAF50; }
+  .habit-name { flex: 1; font-size: 15px; font-weight: 600; }
+  .habit.done .habit-name { text-decoration: line-through; color: #aaa; }
+  .streak { font-size: 13px; color: #ff9800; font-weight: bold; white-space: nowrap; }
+
+  /* Buttons */
+  .btn-toggle {
+    width: 100%; padding: 12px; border: 1px solid rgba(255,255,255,0.15); border-radius: 12px;
+    background: rgba(255,255,255,0.06); color: #fff; font-size: 14px; font-weight: 600;
+    cursor: pointer; margin-top: 10px; display: flex; justify-content: space-between; align-items: center;
+  }
+  .btn-toggle:active { background: rgba(255,255,255,0.12); }
+  .btn-main {
+    width: 100%; padding: 13px; border: none; border-radius: 12px;
+    background: linear-gradient(135deg, #4CAF50, #2E7D32);
+    color: #fff; font-size: 15px; font-weight: bold; cursor: pointer; margin-top: 10px;
+  }
+  .btn-main:active { transform: scale(0.97); }
+  .btn-ghost { padding: 13px 16px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.2);
+    background: transparent; color: #fff; cursor: pointer; font-size: 14px; margin-top: 10px; }
+
+  /* Panels */
+  .panel { display: none; margin-top: 10px; padding: 16px; background: rgba(0,0,0,0.25);
+    border-radius: 14px; border: 1px solid rgba(255,255,255,0.08); }
+  .panel.open { display: block; animation: fadeIn 0.2s; }
+  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+  /* History */
+  .history { margin-top: 18px; }
+  .history h3 { font-size: 14px; color: #aaa; margin-bottom: 8px; }
+  .h-item { display: flex; justify-content: space-between; align-items: center; padding: 10px 12px;
+    background: rgba(255,255,255,0.05); border-radius: 8px; margin-bottom: 6px; font-size: 14px; }
+  .h-done { color: #4CAF50; } .h-miss { color: #777; }
+  .date-header {
+    font-size: 13px; color: #ffca28; margin: 12px 0 6px; font-weight: bold;
+    cursor: pointer; display: flex; justify-content: space-between; align-items: center;
+    padding: 10px 12px; background: rgba(255,202,40,0.08); border-radius: 8px;
+    user-select: none; -webkit-tap-highlight-color: transparent;
+  }
+  .date-header:active { background: rgba(255,202,40,0.16); }
+
+  /* Manage */
+  .manage-row { display: flex; align-items: center; justify-content: space-between;
+    padding: 10px 12px; background: rgba(255,255,255,0.05); border-radius: 8px; margin-bottom: 6px; font-size: 14px; }
+  .del-btn { background: none; border: none; cursor: pointer; font-size: 15px; }
+  #newHabit { margin-bottom: 0; }
+  .add-row { display: flex; gap: 8px; margin-bottom: 12px; }
+  .add-row input { margin-bottom: 0; flex: 1; }
+  .add-row button { padding: 13px 18px; border: none; border-radius: 12px;
+    background: linear-gradient(135deg, #4CAF50, #2E7D32); color: #fff;
+    font-size: 18px; font-weight: bold; cursor: pointer; }
+  input[type=text] {
+    width: 100%; padding: 13px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.18);
+    background: rgba(255,255,255,0.09); color: #fff; font-size: 15px; outline: none;
+  }
+  input:focus { border-color: #4CAF50; }
+  #msg { text-align: center; margin-top: 12px; font-size: 14px; min-height: 22px; }
+  .ok { color: #4CAF50; } .err { color: #f44336; }
+
+  /* Modal */
+  .modal-bg { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.6); z-index: 10; justify-content: center; align-items: center; padding: 20px; }
+  .modal-bg.open { display: flex; }
+  .modal { background: #1e1e3a; border-radius: 18px; padding: 24px; width: 100%; max-width: 360px;
+    border: 1px solid rgba(255,255,255,0.12); max-height: 80vh; overflow-y: auto; }
+  .modal h3 { margin-bottom: 14px; font-size: 17px; }
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="header">
+    <img id="logoImg" alt="🦅">
+    <h1>Loona Habits App</h1>
+  </div>
+  <p class="sub">Small habits daily → big success! 🔥</p>
+  <div class="brand">BY LOONA AUTOMATION</div>
+  <div class="date-line" id="dateLine"></div>
+
+  <div class="progress-wrap">
+    <div class="progress-label"><span>Today's Progress</span><span id="progressText">0%</span></div>
+    <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+  </div>
+
+  <div id="habitList"></div>
+  <div id="msg"></div>
+
+  <button class="btn-toggle" onclick="togglePanel('managePanel', this)">
+    <span>⚙️ Manage Habits</span><span>▼</span>
+  </button>
+  <div class="panel" id="managePanel">
+    <div class="add-row">
+      <input type="text" id="newHabit" placeholder="New habit... e.g.: Reading">
+      <button onclick="addHabit()">+</button>
+    </div>
+    <div id="manageList"></div>
+  </div>
+
+  <button class="btn-toggle" onclick="togglePanel('histPanel', this)">
+    <span>📝 History — by date</span><span>▼</span>
+  </button>
+  <div class="panel" id="histPanel">
+    <div id="histList"></div>
+  </div>
+</div>
+
+<script>
+  var DEFAULT_HABITS = ["Namaz", "Recite Holy Quran", "Exercise", "Learning AI", "Video Idea"];
+  var LOGO_B64 = "data:image/webp;base64,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";
+
+  function getHabits() {
+    var h = localStorage.getItem('lh_habits');
+    if (!h) { localStorage.setItem('lh_habits', JSON.stringify(DEFAULT_HABITS)); return DEFAULT_HABITS.slice(); }
+    return JSON.parse(h);
+  }
+  function getChecks() {
+    return JSON.parse(localStorage.getItem('lh_checks') || '{}');
+  }
+  function saveChecks(c) {
+    try { localStorage.setItem('lh_checks', JSON.stringify(c)); } catch (e) {}
+  }
+  function todayStr() {
+    var n = new Date();
+    return String(n.getDate()).padStart(2,'0') + '/' + String(n.getMonth()+1).padStart(2,'0') + '/' + n.getFullYear();
+  }
+  function dateAdd(ds, days) {
+    var p = ds.split('/');
+    var d = new Date(p[2], p[1]-1, p[0]);
+    d.setDate(d.getDate() + days);
+    return String(d.getDate()).padStart(2,'0') + '/' + String(d.getMonth()+1).padStart(2,'0') + '/' + d.getFullYear();
+  }
+  function escHtml(s) {
+    return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  }
+
+  function streakOf(habit) {
+    var checks = getChecks(), s = 0, d = todayStr();
+    if (!checks[d] || !checks[d][habit]) d = dateAdd(d, -1);
+    while (checks[d] && checks[d][habit]) { s++; d = dateAdd(d, -1); }
+    return s;
+  }
+
+  function render() {
+    var habits = getHabits(), checks = getChecks(), t = todayStr();
+    var today = checks[t] || {};
+    document.getElementById('dateLine').textContent = '📅 ' + t;
+
+    var list = document.getElementById('habitList');
+    list.innerHTML = '';
+    var done = 0;
+    habits.forEach(function(hb, i) {
+      var isDone = !!today[hb];
+      if (isDone) done++;
+      var st = streakOf(hb);
+      var div = document.createElement('div');
+      div.className = 'habit' + (isDone ? ' done' : '');
+      div.innerHTML = '<div class="check">' + (isDone ? '✅' : '') + '</div>' +
+        '<div class="habit-name">' + escHtml(hb) + '</div>' +
+        (st > 0 ? '<div class="streak">🔥' + st + '</div>' : '');
+      div.onclick = function() { toggleHabit(hb); };
+      list.appendChild(div);
+    });
+
+    var pct = habits.length ? Math.round(done / habits.length * 100) : 0;
+    document.getElementById('progressFill').style.width = pct + '%';
+    document.getElementById('progressText').textContent = pct + '% (' + done + '/' + habits.length + ')';
+
+    renderManage();
+    renderHist();
+  }
+
+  function toggleHabit(hb) {
+    var checks = getChecks(), t = todayStr();
+    if (!checks[t]) checks[t] = {};
+    checks[t][hb] = !checks[t][hb];
+    if (!checks[t][hb]) delete checks[t][hb];
+    saveChecks(checks);
+    render();
+  }
+
+  function renderManage() {
+    var habits = getHabits();
+    var ml = document.getElementById('manageList');
+    ml.innerHTML = '';
+    habits.forEach(function(hb, i) {
+      var div = document.createElement('div');
+      div.className = 'manage-row';
+      div.innerHTML = '<span>' + escHtml(hb) + '</span>' +
+        '<button class="del-btn" onclick="delHabit(' + i + ')" title="Delete">🗑️</button>';
+      ml.appendChild(div);
+    });
+  }
+
+  function addHabit() {
+    var v = document.getElementById('newHabit').value.trim();
+    if (!v) { showMsg('Enter a habit name!', 'err'); return; }
+    var habits = getHabits();
+    if (habits.indexOf(v) !== -1) { showMsg('Already exists!', 'err'); return; }
+    habits.push(v);
+    localStorage.setItem('lh_habits', JSON.stringify(habits));
+    document.getElementById('newHabit').value = '';
+    render();
+    showMsg('✅ "' + v + '" added!', 'ok');
+  }
+
+  function delHabit(i) {
+    if (!confirm('Delete this habit?')) return;
+    var habits = getHabits();
+    habits.splice(i, 1);
+    localStorage.setItem('lh_habits', JSON.stringify(habits));
+    render();
+  }
+
+  function renderHist() {
+    var checks = getChecks(), habits = getHabits();
+    var dates = Object.keys(checks).sort(function(a, b) {
+      var pa = a.split('/'), pb = b.split('/');
+      return new Date(pb[2], pb[1]-1, pb[0]) - new Date(pa[2], pa[1]-1, pa[0]);
+    });
+    var list = document.getElementById('histList');
+    list.innerHTML = '';
+    if (!dates.length) {
+      list.innerHTML = '<p style="color:#777;font-size:13px;text-align:center;">No history yet — start today! 💪</p>';
+      return;
+    }
+    var t = todayStr();
+    dates.slice(0, 30).forEach(function(d, idx) {
+      var day = checks[d], doneCount = 0;
+      var dh = document.createElement('div');
+      dh.className = 'date-header';
+      dh.innerHTML = '<span>' + (d === t ? '📅 Today (' + d + ')' : '📅 ' + d) +
+        '</span><span class="arrow">' + (idx === 0 ? '▲' : '▼') + '</span>';
+      var body = document.createElement('div');
+      if (idx !== 0) body.style.display = 'none';
+      habits.forEach(function(hb) {
+        var ok = !!(day[hb]);
+        if (ok) doneCount++;
+        var div = document.createElement('div');
+        div.className = 'h-item';
+        div.innerHTML = '<span>' + escHtml(hb) + '</span>' +
+          '<span class="' + (ok ? 'h-done' : 'h-miss') + '">' + (ok ? '✅' : '⬜') + '</span>';
+        body.appendChild(div);
+      });
+      var pct = habits.length ? Math.round(doneCount / habits.length * 100) : 0;
+      var bar = document.createElement('div');
+      bar.className = 'h-item';
+      bar.style.background = 'rgba(76,175,80,0.15)';
+      bar.style.fontWeight = 'bold';
+      bar.innerHTML = '<span>📊 Day Score</span><span>' + pct + '%</span>';
+      body.appendChild(bar);
+      dh.onclick = function() {
+        var hidden = body.style.display === 'none';
+        body.style.display = hidden ? 'block' : 'none';
+        dh.querySelector('.arrow').textContent = hidden ? '▲' : '▼';
+      };
+      list.appendChild(dh);
+      list.appendChild(body);
+    });
+  }
+
+  function togglePanel(id, btn) {
+    var p = document.getElementById(id);
+    var open = p.classList.toggle('open');
+    btn.querySelector('span:last-child').textContent = open ? '▲' : '▼';
+  }
+  function showMsg(t, c) {
+    var m = document.getElementById('msg');
+    m.textContent = t; m.className = c;
+    setTimeout(function() { m.textContent = ''; }, 3000);
+  }
+
+  document.getElementById('logoImg').src = LOGO_B64;
+  render();
+</script>
+</body>
+</html>
