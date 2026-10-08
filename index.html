@@ -18,11 +18,11 @@
     border: 1px solid rgba(255,255,255,0.12);
     box-shadow: 0 12px 40px rgba(0,0,0,0.4); margin: 10px 0;
   }
-  .header { display: flex; align-items: center; gap: 12px; margin-bottom: 4px; }
-  .header img { width: 44px; height: 44px; border-radius: 12px; }
-  .header h1 { font-size: 20px; }
-  .brand { font-size: 10px; color: #ffca28; letter-spacing: 2px; text-align: center; margin-bottom: 4px; }
-  .sub { text-align: center; color: #aaa; font-size: 12px; margin-bottom: 20px; }
+  .brand-header { text-align: center; margin-bottom: 18px; }
+  .brand-header img { width: 64px; height: 64px; border-radius: 16px; margin-bottom: 10px; }
+  .brand-header h1 { font-size: 22px; margin-bottom: 6px; }
+  .brand-header .sub { font-size: 13px; color: #aaa; margin-bottom: 8px; }
+  .brand-header .brand { font-size: 10px; color: #ffca28; letter-spacing: 3px; }
   .date-line { text-align: center; font-size: 14px; color: #ffca28; margin-bottom: 16px; font-weight: 600; }
 
   /* Progress */
@@ -116,12 +116,12 @@
 </head>
 <body>
 <div class="card">
-  <div class="header">
-    <img id="logoImg" alt="🦅">
-    <h1>Loona Habits App</h1>
-  </div>
+<div class="brand-header">
+  <img id="logoImg" alt="🦅">
+  <h1>Loona Habits App</h1>
   <p class="sub">Small habits daily → big success! 🔥</p>
   <div class="brand">BY LOONA AUTOMATION</div>
+</div>
   <div class="date-line" id="dateLine"></div>
 
   <div class="progress-wrap">
