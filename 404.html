@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta name="msvalidate.01" content="668EEE252F09B71CC35E95DB8F5999EF">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1566440962454692" crossorigin="anonymous"></script>
+ <meta name="google-site-verification" content="uDbJgI5DPiK6N7loTGyaAOwMrWXC7s-zAJwxzrXK74s" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Page Not Found | Loona Habits</title>
+<meta name="robots" content="noindex">
+<meta name="description" content="Free daily habit tracker with streaks: build Namaz, Quran, exercise and study habits day by day. No signup, works offline, data stays on your device.">
+<meta name="keywords" content="habit tracker, daily habit tracker app, free habit tracker, streak tracker, namaz tracker, routine tracker">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
+    min-height: 100vh; display: flex; justify-content: center; align-items: flex-start;
+    padding: 20px; color: #fff;
+  }
+  .card {
+    background: rgba(255,255,255,0.07); border-radius: 24px; padding: 28px 22px;
+    width: 100%; max-width: 400px; backdrop-filter: blur(12px);
+    border: 1px solid rgba(255,255,255,0.12);
+    box-shadow: 0 12px 40px rgba(0,0,0,0.4); margin: 10px 0;
+  }
+  .brand-header { text-align: center; margin-bottom: 18px; }
+  .brand-header img { width: 64px; height: 64px; border-radius: 16px; margin-bottom: 10px; }
+  .brand-header h1 { font-size: 22px; margin-bottom: 6px; }
+  .brand-header .sub { font-size: 13px; color: #aaa; margin-bottom: 8px; }
+  .brand-header .brand { font-size: 10px; color: #ffca28; letter-spacing: 3px; }
+  .date-line { text-align: center; font-size: 14px; color: #ffca28; margin-bottom: 16px; font-weight: 600; }
+
+  /* Progress */
+  .progress-wrap { margin-bottom: 18px; }
+  .progress-label { display: flex; justify-content: space-between; font-size: 13px; color: #ccc; margin-bottom: 6px; }
+  .progress-bar { height: 12px; background: rgba(255,255,255,0.1); border-radius: 8px; overflow: hidden; }
+  .progress-fill { height: 100%; background: linear-gradient(90deg, #4CAF50, #8BC34A); border-radius: 8px;
+    transition: width 0.3s; width: 0%; }
+
+  /* Habits */
+  .habit {
+    display: flex; align-items: center; gap: 12px; padding: 14px;
+    background: rgba(255,255,255,0.05); border-radius: 14px; margin-bottom: 10px;
+    cursor: pointer; border: 1px solid transparent; transition: all 0.15s;
+    user-select: none; -webkit-tap-highlight-color: transparent;
+  }
+  .habit:active { transform: scale(0.98); }
+  .habit.done { border-color: rgba(76,175,80,0.5); background: rgba(76,175,80,0.1); }
+  .check {
+    width: 30px; height: 30px; border-radius: 50%; border: 2px solid rgba(255,255,255,0.3);
+    display: flex; align-items: center; justify-content: center; font-size: 16px; flex-shrink: 0;
+    transition: all 0.15s;
+  }
+  .habit.done .check { background: #4CAF50; border-color: #4CAF50; }
+  .habit-name { flex: 1; font-size: 15px; font-weight: 600; }
+  .habit.done .habit-name { text-decoration: line-through; color: #aaa; }
+  .streak { font-size: 13px; color: #ff9800; font-weight: bold; white-space: nowrap; }
+
+  /* Buttons */
+  .btn-toggle {
+    width: 100%; padding: 12px; border: 1px solid rgba(255,255,255,0.15); border-radius: 12px;
+    background: rgba(255,255,255,0.06); color: #fff; font-size: 14px; font-weight: 600;
+    cursor: pointer; margin-top: 10px; display: flex; justify-content: space-between; align-items: center;
+  }
+  .btn-toggle:active { background: rgba(255,255,255,0.12); }
+  .btn-main {
+    width: 100%; padding: 13px; border: none; border-radius: 12px;
+    background: linear-gradient(135deg, #4CAF50, #2E7D32);
+    color: #fff; font-size: 15px; font-weight: bold; cursor: pointer; margin-top: 10px;
+  }
+  .btn-main:active { transform: scale(0.97); }
+  .btn-ghost { padding: 13px 16px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.2);
+    background: transparent; color: #fff; cursor: pointer; font-size: 14px; margin-top: 10px; }
+
+  /* Panels */
+  .panel { display: none; margin-top: 10px; padding: 16px; background: rgba(0,0,0,0.25);
+    border-radius: 14px; border: 1px solid rgba(255,255,255,0.08); }
+  .panel.open { display: block; animation: fadeIn 0.2s; }
+  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+  /* History */
+  .history { margin-top: 18px; }
+  .history h3 { font-size: 14px; color: #aaa; margin-bottom: 8px; }
+  .h-item { display: flex; justify-content: space-between; align-items: center; padding: 10px 12px;
+    background: rgba(255,255,255,0.05); border-radius: 8px; margin-bottom: 6px; font-size: 14px; }
+  .h-done { color: #4CAF50; } .h-miss { color: #777; }
+  .date-header {
+    font-size: 13px; color: #ffca28; margin: 12px 0 6px; font-weight: bold;
+    cursor: pointer; display: flex; justify-content: space-between; align-items: center;
+    padding: 10px 12px; background: rgba(255,202,40,0.08); border-radius: 8px;
+    user-select: none; -webkit-tap-highlight-color: transparent;
+  }
+  .date-header:active { background: rgba(255,202,40,0.16); }
+
+  /* Manage */
+  .manage-row { display: flex; align-items: center; justify-content: space-between;
+    padding: 10px 12px; background: rgba(255,255,255,0.05); border-radius: 8px; margin-bottom: 6px; font-size: 14px; }
+  .del-btn { background: none; border: none; cursor: pointer; font-size: 15px; }
+  #newHabit { margin-bottom: 0; }
+  .add-row { display: flex; gap: 8px; margin-bottom: 12px; }
+  .add-row input { margin-bottom: 0; flex: 1; }
+  .add-row button { padding: 13px 18px; border: none; border-radius: 12px;
+    background: linear-gradient(135deg, #4CAF50, #2E7D32); color: #fff;
+    font-size: 18px; font-weight: bold; cursor: pointer; }
+  input[type=text] {
+    width: 100%; padding: 13px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.18);
+    background: rgba(255,255,255,0.09); color: #fff; font-size: 15px; outline: none;
+  }
+  input:focus { border-color: #4CAF50; }
+  #msg { text-align: center; margin-top: 12px; font-size: 14px; min-height: 22px; }
+  .ok { color: #4CAF50; } .err { color: #f44336; }
+
+  /* Modal */
+  .modal-bg { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.6); z-index: 10; justify-content: center; align-items: center; padding: 20px; }
+  .modal-bg.open { display: flex; }
+  .modal { background: #1e1e3a; border-radius: 18px; padding: 24px; width: 100%; max-width: 360px;
+    border: 1px solid rgba(255,255,255,0.12); max-height: 80vh; overflow-y: auto; }
+  .modal h3 { margin-bottom: 14px; font-size: 17px; }
+</style>
+<link rel="canonical" href="https://loonaautomation.github.io/loona-habits-app/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Loona Automation">
+<meta property="og:title" content="Free Habit Tracker App: Daily Habits, Streaks & Namaz Tracker | Loona">
+<meta property="og:description" content="Free daily habit tracker with streaks: build Namaz, Quran, exercise and study habits day by day. No signup, works offline, data stays on your device.">
+<meta property="og:url" content="https://loonaautomation.github.io/loona-habits-app/">
+<meta property="og:image" content="https://loonaautomation.github.io/loona-habits-app/og-image.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Free Habit Tracker App: Daily Habits, Streaks & Namaz Tracker | Loona">
+<meta name="twitter:description" content="Free daily habit tracker with streaks: build Namaz, Quran, exercise and study habits day by day. No signup, works offline, data stays on your device.">
+<meta name="twitter:image" content="https://loonaautomation.github.io/loona-habits-app/og-image.jpg">
+<meta name="theme-color" content="#062e2a">
+<link rel="icon" type="image/png" sizes="32x32" href="/loona-habits-app/favicon-32.png">
+<link rel="icon" type="image/png" sizes="192x192" href="/loona-habits-app/icon-192.png">
+<link rel="apple-touch-icon" href="/loona-habits-app/apple-touch-icon.png">
+<link rel="manifest" href="/loona-habits-app/manifest.webmanifest">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebApplication", "name": "Loona Habits App", "url": "https://loonaautomation.github.io/loona-habits-app/", "applicationCategory": "UtilitiesApplication", "operatingSystem": "Web", "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"}, "publisher": {"@type": "Organization", "name": "Loona Automation"}}</script>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-5L43M13ZYT"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-5L43M13ZYT');
+</script>
+<script type="text/javascript">
+(function(c,l,a,r,i,t,y){c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);})(window, document, "clarity", "script", "z599jkwoy9");
+</script>
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@type": "FAQPage",
+ "mainEntity": [
+  {
+   "@type": "Question",
+   "name": "Is the Loona Habits App free?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "Yes. The Loona Habits App is a free habit tracker \u2014 no signup needed. Open the page, add your habits and start today."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "What can I track with it?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "Any daily habit you want to build \u2014 study, exercise, reading and more \u2014 including a dedicated Namaz (prayer) tracker, with daily streaks to keep you consistent."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "How do streaks and progress work?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "Each day you mark your habits done, your streak grows and the app shows today's progress as a percentage. You can also review your full history by date to see how consistent you have been."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "Why do habits matter?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "Small habits done daily lead to big success. Tracking them visibly \u2014 with streaks you do not want to break \u2014 is one of the simplest ways to stay on track."
+   }
+  }
+ ]
+}
+</script>
+</head>
+<body>
+<header style="background:#062e2a;padding:14px 20px;display:flex;align-items:center;gap:12px;"><img src="/loona-habits-app/icon-192.png" alt="Loona Habits logo" style="width:42px;height:42px;border-radius:50%;"><span style="color:#fff;font-size:20px;font-weight:700;font-family:inherit;">Loona Habits</span></header>
+<main style="max-width:720px;margin:0 auto;padding:64px 20px 72px;text-align:center;">
+<div style="font-size:96px;font-weight:800;line-height:1;color:#d4af37;">404</div>
+<h1 style="font-size:34px;margin:14px 0 10px;">Page Not Found</h1>
+<p style="font-size:17px;line-height:1.6;opacity:.85;margin:0 auto 28px;max-width:520px;">This page doesn't exist. Head back to your habits and keep your streak alive.</p>
+<a href="/loona-habits-app/" style="display:inline-block;background:#d4af37;color:#1c2422;font-weight:700;text-decoration:none;padding:13px 30px;border-radius:999px;font-size:16px;">&#8592; Back to Loona Habits Home</a>
+</main>
+<footer style="text-align:center;padding:24px 16px;opacity:.75;font-size:14px;">Built by Aurang Zeb Loona | Loona Automation</footer>
+</body>
+</html>
