@@ -1,3 +1,3 @@
 User-agent: *
 Allow: /
-Sitemap: https://loonaautomation.github.io/loona-habits-app/sitemap.xml
+Sitemap: https://habits.loonaautomation.com/sitemap.xml
